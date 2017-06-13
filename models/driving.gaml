@@ -24,8 +24,9 @@ global {
 	
 	file my_csv_file <- csv_file("../doc/aidwork1.csv", ",");
 	matrix population <- matrix(my_csv_file);
-	map answers <- user_input("Number of Residents to Generate from National Survey", ["Number of residents"::""]);
-	int Number_of_residents <- int(answers["Number of residents"]);
+	map<string, unknown> answers <- user_input("Number of Residents to Generate from National Survey", ["How many Number of residents?"::"", "Put them in which Postcode?"::""]);
+	int Number_of_residents <- int(answers["How many Number of residents?"]);
+	int put_in_postcode <-int(answers["Put them in which Postcode?"]);
 	
 	init{
 		write gauss(0,1);
@@ -35,8 +36,15 @@ global {
 					ddag::float(read("DDAG")),dndag::float(read("DNONDAG")),darb::float(read("DARB")), dpop::float(read("DPOP"))		];
 		
 		create driving_people number:Number_of_residents{
-			myPC <- one_of(driving_pc_polygons) ;
-			location <- any_location_in(myPC); 
+			if is_number(put_in_postcode) and (put_in_postcode)!=0{
+				// use this next two lines if you want to place agents as per request of the user
+			myPC <- first(driving_pc_polygons where (each.pc=put_in_postcode));
+			location <- any_location_in(myPC);
+			} 
+			else {//use this next two lines if you want to place agents randomly
+			myPC <- one_of(driving_pc_polygons);
+			location <- any_location_in(myPC);
+			}
 			albatross_Xdag<-world.classify_xdag(myPC.xdag);
 			albatross_Xndag<-world.classify_xndag(myPC.xndag);
 			albatross_Xarb<-world.classify_xarb(myPC.xarb);
