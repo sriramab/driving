@@ -13,7 +13,7 @@ import "classify.gaml"
 global {
 	/** Insert the global definitions, variables and actions here */
 	// READ PHYSICAL ENVIRONMENT
-	float step <- 1 # mn;
+	float step <- 15 # mn;
 	file NL_mainroads_shape <- file("../includes/NL/ActueleWegenlijst.shp");
 	file NL_postcodes_shape <- file("../includes/NL/pcPoints.shp");
 	file simplePostCode <- file("../includes/NL/NL_PCstats.shp");
@@ -27,6 +27,7 @@ global {
 	map<string, unknown> answers <- user_input("Number of Residents to Generate from National Survey", ["How many Number of residents?"::"", "Put them in which Postcode?"::""]);
 	int Number_of_residents <- int(answers["How many Number of residents?"]);
 	int put_in_postcode <-int(answers["Put them in which Postcode?"]);
+	
 	
 	init{
 		write gauss(0,1);
@@ -44,6 +45,7 @@ global {
 			else {//use this next two lines if you want to place agents randomly
 			myPC <- one_of(driving_pc_polygons);
 			location <- any_location_in(myPC);
+			
 			}
 			albatross_Xdag<-world.classify_xdag(myPC.xdag);
 			albatross_Xndag<-world.classify_xndag(myPC.xndag);
@@ -53,15 +55,24 @@ global {
 			albatross_Dndag<-world.classify_dndag(myPC.dndag);
 			albatross_Darb<-world.classify_darb(myPC.darb);
 			albatross_Dpop<-world.classify_dpop(myPC.dpop);
-			
+			save [albatross_Darb] to:"../R/useTrees/1.csv" type:csv header:true;
+			ask world{
+		
+			do initialState;
+			}
 			
 		}
 	}
 	
-	reflex initialState when:cycle=1{
-		ask driving_people{
-			save [name,int(self)] to:"export.csv" type:csv header:true  ;
-		}
+	action initialState {
+		
+			//save driving_people to:"../R/useTrees/d1_workYesNo.csv" type:csv header:true  ;
+			//write "my name";
+		
+		
+	}
+	
+	reflex d1_workYesNo when:every(96.0){
 		
 	}
 }
@@ -158,15 +169,12 @@ species driving_people skills:[moving]{
 			
 			// GET SITUATIONAL CHARACTERISTICS FROM SHAPEFILES
 			
-			do assess_my_situational_characteristics();
+			
 		
 		
 	}
 	
-	action assess_my_situational_characteristics{
-		 
-		 
-	}
+	
 	
 	
 	
@@ -179,20 +187,13 @@ species driving_people skills:[moving]{
 experiment ABCDdriving type: gui {
 	/** Insert here the definition of the input and output of the model */
 	output {
-		display first type:java2D{
+		display first type:java2D  focus:is_number(put_in_postcode) and (put_in_postcode)!=0?(first(driving_pc_polygons where (each.pc=put_in_postcode))):world.shape{
 			species driving_pc_polygons aspect:a;
 			species driving_people aspect:a;
 			
 			species driving_roads aspect:a ;
 			species driving_pointShape aspect:a;
 		}
-		display focussed type:opengl camera_pos:{driving_pc_polygons(320).location.x, driving_pc_polygons(320).location.y, 125000} camera_look_pos:{driving_pc_polygons(320).location.x, driving_pc_polygons(320).location.y, 50} {
-			//focus_on driving_pc_polygons(320);
-			species driving_pc_polygons aspect:a ;
-			species driving_people aspect:a;
-			species driving_pointShape aspect:a;
-			species driving_roads aspect:a ;
-			
-		}
+		
 	}
 }
