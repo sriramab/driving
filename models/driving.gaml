@@ -7,22 +7,24 @@
 
 
 model ABCDdriving
-import "classify.gaml"
+import "functions.gaml"
 
 
 global {
 	/** Insert the global definitions, variables and actions here */
-	// READ PHYSICAL ENVIRONMENT
+	// DEFINE SIMULATION STEP SIZE
 	float step <- 15 # mn;
+	
+	// READ PHYSICAL ENVIRONMENT
 	file NL_mainroads_shape <- file("../includes/NL/ActueleWegenlijst.shp");
 	file NL_postcodes_shape <- file("../includes/NL/pcPoints.shp");
 	file simplePostCode <- file("../includes/NL/NL_PCstats.shp");
 	
+	// DEFINE SHAPE OF THE EXPERIMENT
 	geometry shape <-envelope(simplePostCode);
 	
 	// READ AGENT ATTRIBUTES FROM NATIONAL SURVEY
-	
-	file my_csv_file <- csv_file("../doc/aidwork1.csv", ",");
+	file my_csv_file <- csv_file("../includes/aidwork1.csv", ",");
 	matrix population <- matrix(my_csv_file);
 	map<string, unknown> answers <- user_input("Number of Residents to Generate from National Survey", ["How many Number of residents?"::"", "Put them in which Postcode?"::""]);
 	int Number_of_residents <- int(answers["How many Number of residents?"]);
@@ -37,44 +39,14 @@ global {
 					ddag::float(read("DDAG")),dndag::float(read("DNONDAG")),darb::float(read("DARB")), dpop::float(read("DPOP"))		];
 		
 		create driving_people number:Number_of_residents{
-			if is_number(put_in_postcode) and (put_in_postcode)!=0{
-				// use this next two lines if you want to place agents as per request of the user
-			myPC <- first(driving_pc_polygons where (each.pc=put_in_postcode));
-			location <- any_location_in(myPC);
-			} 
-			else {//use this next two lines if you want to place agents randomly
-			myPC <- one_of(driving_pc_polygons);
-			location <- any_location_in(myPC);
 			
-			}
-			albatross_Xdag<-world.classify_xdag(myPC.xdag);
-			albatross_Xndag<-world.classify_xndag(myPC.xndag);
-			albatross_Xarb<-world.classify_xarb(myPC.xarb);
-			albatross_Xpop<-world.classify_xpop(myPC.xpop);
-			albatross_Ddag<-world.classify_ddag(myPC.ddag);
-			albatross_Dndag<-world.classify_dndag(myPC.dndag);
-			albatross_Darb<-world.classify_darb(myPC.darb);
-			albatross_Dpop<-world.classify_dpop(myPC.dpop);
-			save [albatross_Darb] to:"../R/useTrees/1.csv" type:csv header:true;
-			ask world{
-		
-			do initialState;
-			}
+			
+			
 			
 		}
 	}
 	
-	action initialState {
-		
-			//save driving_people to:"../R/useTrees/d1_workYesNo.csv" type:csv header:true  ;
-			//write "my name";
-		
-		
-	}
 	
-	reflex d1_workYesNo when:every(96.0){
-		
-	}
 }
 
 species driving_pc_polygons{
@@ -152,9 +124,7 @@ species driving_people skills:[moving]{
 		
 		// GET SOCIO-ECONOMIC CHARACTERISTICS FROM NATIONAL SURVEY
 		list requested_population <- one_of(sample(rows_list(population), 1, false));
-			//write requested_population;
-			//write requested_population[2];
-			//aidwork1
+			
 			albatross_Urb <- int(requested_population[0]);
 			albatross_Comp <- int(requested_population[1]) ;
 			albatross_Child <- int(requested_population[2]) ;
@@ -167,12 +137,98 @@ species driving_people skills:[moving]{
 			albatross_wstat <- int(requested_population[9]) ;
 			albatross_Pwstat <- int(requested_population[10]) ;
 			
-			// GET SITUATIONAL CHARACTERISTICS FROM SHAPEFILES
 			
 			
-		
-		
+			if is_number(put_in_postcode) and (put_in_postcode)!=0{
+				// use this next two lines if you want to place agents as per request of the user
+			myPC <- first(driving_pc_polygons where (each.pc=put_in_postcode));
+			location <- any_location_in(myPC);
+			} 
+			else {//use this next two lines if you want to place agents randomly
+			myPC <- one_of(driving_pc_polygons);
+			location <- any_location_in(myPC);
+			
+			}
+			
+			//ASSIGN SITUATIONAL ATTRIBUTES TO AGENTS ONCE THEY HAVE A LOCATION
+			albatross_Xdag<-world.classify_xdag(myPC.xdag);
+			albatross_Xndag<-world.classify_xndag(myPC.xndag);
+			albatross_Xarb<-world.classify_xarb(myPC.xarb);
+			albatross_Xpop<-world.classify_xpop(myPC.xpop);
+			albatross_Ddag<-world.classify_ddag(myPC.ddag);
+			albatross_Dndag<-world.classify_dndag(myPC.dndag);
+			albatross_Darb<-world.classify_darb(myPC.darb);
+			albatross_Dpop<-world.classify_dpop(myPC.dpop);
+			//save [albatross_Darb] to:"../R/useTrees/1.csv" type:csv header:true;
+			
+			write build_d1_parameters(self);
+			
+					
 	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	///																					     ///
+	///								DECISION TREES										     ///
+	///																					     ///
+	///    START - ACTION LIST TO GET KEY VALUES TO MATCH THE DECISION TREE AS RECOMMENED BY AUKE         ///
+    ///																					     ///
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	string build_d1_parameters(driving_people d){
+		string d1 <- string(d.albatross_Urb)+string(d.albatross_Comp)+string(d.albatross_Child)+
+		string(d.albatross_Day) +string(d.albatross_pAge)+string(d.albatross_SEC)+string(d.albatross_Ncar)+
+		string(d.albatross_Gend)+string(d.albatross_Driver) + string(d.albatross_wstat)+ string(d.albatross_Pwstat)+
+		string(d.albatross_Xdag)+string(d.albatross_Xndag)+string(d.albatross_Xarb)+string(d.albatross_Xpop)+
+		string(d.albatross_Ddag)+string(d.albatross_Dndag)+string(d.albatross_Darb)+string(d.albatross_Dpop);
+		return d1;
+	}
+	
+	string build_d2_parameters(driving_people d){
+		string d2 <- string(d.albatross_Urb)+string(d.albatross_Comp)+string(d.albatross_Child)+
+		string(d.albatross_Day) +string(d.albatross_pAge)+string(d.albatross_SEC)+string(d.albatross_Ncar)+
+		string(d.albatross_Gend)+string(d.albatross_Driver) + string(d.albatross_wstat)+ string(d.albatross_Pwstat)+
+		string(d.albatross_Xdag)+string(d.albatross_Xndag)+string(d.albatross_Xarb)+string(d.albatross_Xpop)+
+		string(d.albatross_Ddag)+string(d.albatross_Dndag)+string(d.albatross_Darb)+string(d.albatross_Dpop);
+		return d2;
+	} 
+	
+	string build_d3_parameters(driving_people d){
+		string d3 <- string(d.albatross_Urb)+string(d.albatross_Comp)+string(d.albatross_Child)+
+		string(d.albatross_Day) +string(d.albatross_pAge)+string(d.albatross_SEC)+string(d.albatross_Ncar)+
+		string(d.albatross_Gend)+string(d.albatross_Driver) + string(d.albatross_wstat)+ string(d.albatross_Pwstat)+
+		string(d.albatross_Xdag)+string(d.albatross_Xndag)+string(d.albatross_Xarb)+string(d.albatross_Xpop)+
+		string(d.albatross_Ddag)+string(d.albatross_Dndag)+string(d.albatross_Darb)+string(d.albatross_Dpop);
+		return d3;
+	}
+	
+	string build_d4_parameters(driving_people d){
+		string d4 <- string(d.albatross_Urb)+string(d.albatross_Comp)+string(d.albatross_Child)+
+		string(d.albatross_Day) +string(d.albatross_pAge)+string(d.albatross_SEC)+string(d.albatross_Ncar)+
+		string(d.albatross_Gend)+string(d.albatross_Driver) + string(d.albatross_wstat)+ string(d.albatross_Pwstat)+
+		string(d.albatross_Xdag)+string(d.albatross_Xndag)+string(d.albatross_Xarb)+string(d.albatross_Xpop)+
+		string(d.albatross_Ddag)+string(d.albatross_Dndag)+string(d.albatross_Darb)+string(d.albatross_Dpop);
+		return d4;
+	}
+	
+	string build_d5_parameters(driving_people d){
+		string d5 <- string(d.albatross_Urb)+string(d.albatross_Comp)+string(d.albatross_Child)+
+		string(d.albatross_Day) +string(d.albatross_pAge)+string(d.albatross_SEC)+string(d.albatross_Ncar)+
+		string(d.albatross_Gend)+string(d.albatross_Driver) + string(d.albatross_wstat)+ string(d.albatross_Pwstat)+
+		string(d.albatross_Xdag)+string(d.albatross_Xndag)+string(d.albatross_Xarb)+string(d.albatross_Xpop)+
+		string(d.albatross_Ddag)+string(d.albatross_Dndag)+string(d.albatross_Darb)+string(d.albatross_Dpop);
+		return d5;
+	}
+	
+	
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	///																					     ///
+	///								DECISION TREES										     ///
+	///																					     ///
+	///    END - ACTION LIST TO GET KEY VALUES TO MATCH THE DECISION TREE AS RECOMMENED BY AUKE             ///
+    ///																					     ///
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	
 	
 	

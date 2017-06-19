@@ -1,0 +1,22 @@
+---
+title: "R trees to GAMA maps"
+author: "Srirama Bhamidipati"
+date: "19 June 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
+knitr::opts_chunk$set(fig.path = "images/")
+setwd("/Volumes/DATA/gitprojects/driving/R")
+```
+
+## Decision 1
+
+```{r decision1, echo=TRUE}
+
+#knitr::read_chunk('/Volumes/DATA/gitprojects/driving/R/buiildTrees/aidwork1.R')
+```
+
+
