@@ -30,6 +30,7 @@ global {
 	int Number_of_residents <- int(answers["How many Number of residents?"]);
 	int put_in_postcode <-int(answers["Put them in which Postcode?"]);
 	
+	list<map> Decisions;
 	
 	init{
 		write gauss(0,1);

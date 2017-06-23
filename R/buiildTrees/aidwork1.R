@@ -1,6 +1,6 @@
 #setwd("D:/CHAID")
 
-## ----decision1
+## @knitr decision1
 
 library(CHAID)
 aidwork1 = read.table("aidwork1.dat",header=TRUE)

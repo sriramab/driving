@@ -1,3 +1,5 @@
+## @knitr decision2
+
 library(cchaid)
 library(partykit)
 aidwork2 = read.table("aidwork2.dat",header=TRUE)

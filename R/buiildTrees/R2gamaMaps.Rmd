@@ -1,0 +1,128 @@
+---
+title: "R trees to GAMA maps"
+author: "Srirama Bhamidipati"
+date: "19 June 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
+knitr::opts_chunk$set(fig.path = "images/")
+#setwd("/Volumes/DATA/gitprojects/driving/R/buildTrees")
+library(CHAID)
+```
+
+### Create base  categories
+
+
+
+These values are taken from table 4.3 pg 74
+
+```{r echo=FALSE}
+al_label<- c("urb", "day", "comp",
+             "child", "age", "SEC",
+             "Ncars", "drivers", "Gend", "Wstat", "Pwstat")
+
+al_levels = c("0-4", "0-6", "0-4", "0-3", "0-4" , "0-3", "0-2", "0-1","0-1" , "0-2", "1-2")
+
+al_seq =list(seq(0,4), seq(0,6), seq(0,4), seq(0,3), seq(0,4), seq(0,3), seq(0,2), seq(0,1), seq(0,1), seq(0,2), seq(1,2))
+
+socio_economic_attributes <-data.frame(al_label, al_levels)# al_seq)
+socio_economic_attributes$values<-al_seq
+knitr::kable(socio_economic_attributes)
+```
+
+
+### Create base dummy data categories
+
+```{r}
+a = seq(1,3)
+b = seq(1,8)
+dummyDecision1 = expand.grid(seq(0,4), seq(0,6), seq(0,4), seq(0,3), seq(0,4), seq(0,3), seq(0,2), seq(0,1), seq(0,1), seq(0,2), seq(1,2))
+
+knitr::kable(dummyDecision1)
+```
+
+
+
+### Decision 1
+
+```{r , echo=FALSE}
+knitr::read_chunk('aidwork1.R')
+
+```
+
+
+
+```{r decision1 , eval=FALSE}
+
+```
+
+### Decision 2
+
+```{r , echo=FALSE}
+knitr::read_chunk('aidwork2.R')
+
+```
+
+
+
+```{r decision2 , eval=FALSE}
+
+```
+
+### Decision 3
+
+```{r , echo=FALSE}
+knitr::read_chunk('aidwork3.R')
+
+```
+
+
+
+```{r decision3 , eval=FALSE}
+
+```
+
+
+### Decision 4
+
+```{r , echo=FALSE}
+knitr::read_chunk('aidwork4.R')
+
+```
+
+
+
+```{r decision4 , eval=FALSE}
+
+```
+
+
+### Decision 5
+
+```{r , echo=FALSE}
+knitr::read_chunk('aidwork5.R')
+
+```
+
+
+
+```{r decision5 , eval=FALSE}
+
+```
+
+
+### Decision 6
+
+```{r , echo=FALSE}
+knitr::read_chunk('aidwork6.R')
+
+```
+
+
+
+```{r decision6 , eval=FALSE}
+
+```
