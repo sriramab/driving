@@ -12,16 +12,26 @@ import "functions.gaml"
 
 global {
 	/** Insert the global definitions, variables and actions here */
-	// DEFINE SIMULATION STEP SIZE
-	float step <- 15 # mn;
+	
+	
+	// DEFINE SIMULATION STEP SIZE, HOUR , DAY OF THE WEEK AND TOTAL DAYS
+	float step <- 15 # mn; 
+	float currentTime <- time;
+	int hour_of_day <-(int(time/3600)) mod 23 update:(int(time/3600)) mod 23;//function:{(int(time/3600)) mod 23};
+	int day_of_week <-int(time/(3600*24)) mod 6 update:int(time/(3600*24)) mod 6;//function:{int(time/(3600*24)) mod 6 };
+	int totalDays <-int(time/(3600*24)) update:int(time/(3600*24));//function:{int(time/(3600*24))};
 	
 	// READ PHYSICAL ENVIRONMENT
-	file NL_mainroads_shape <- file("../includes/NL/ActueleWegenlijst.shp");
+	file NL_mainroads_shape <- file("../includes/NL/NLtraced.shp");
 	file NL_postcodes_shape <- file("../includes/NL/pcPoints.shp");
 	file simplePostCode <- file("../includes/NL/NL_PCstats.shp");
 	
 	// DEFINE SHAPE OF THE EXPERIMENT
 	geometry shape <-envelope(simplePostCode);
+	
+	// DEFINE ROAD AS A GRAPH
+	graph the_graph;
+	
 	
 	// READ AGENT ATTRIBUTES FROM NATIONAL SURVEY
 	file my_csv_file <- csv_file("../includes/aidwork1.csv", ",");
@@ -34,6 +44,7 @@ global {
 	
 	init{
 		write gauss(0,1);
+		
 		create driving_roads from:NL_mainroads_shape;
 	//	create driving_pointShape from:NL_postcodes_shape with:[pc::int(read("PPC")),xdag::int(read("XDAG")),xndag::int(read("XNDAG")),xarb::int(read("XARB")), xpop::int(read("XPOP"))];
 		create driving_pc_polygons from:simplePostCode with:[pc::int(read("PPC")),xdag::int(read("XDAG")),xndag::int(read("XNONDAG")),xarb::int(read("XARB")), xpop::int(read("XPOP")),
@@ -41,10 +52,16 @@ global {
 		
 		create driving_people number:Number_of_residents{
 			
-			
+		the_graph <- as_edge_graph(NL_mainroads_shape) ;
 			
 			
 		}
+	}
+	
+	reflex time_scale{
+		write "hour of day: " + hour_of_day;
+		write "day of week: " + day_of_week;
+		write "total_time: " + totalDays;
 	}
 	
 	
@@ -63,7 +80,7 @@ species driving_pc_polygons{
 	float darb;
 	float dpop;
 	aspect a{
-		draw shape color:rgb(#lightgray,0.4) empty:false ;
+		draw shape color:(day_of_week>4)?rgb(#orange,0.4):rgb(#lightgray,0.4) empty:false ;
 	}
 }
 
@@ -81,7 +98,20 @@ species driving_roads {
 	}
 	
 }
-species driving_people skills:[moving]{
+species driving_people skills:[moving] control:fsm{
+	
+	
+	//MOVING CHARACTERISITICS 
+	float speed <- 70 + rnd(1)*20 #km/#h; //speeds from 50 to 90 kmph
+	
+	// DAY EBHAVIOR = true(monday:0, tuesday:1, wednesday:2, thursday:3, friday:4); false(saturday:5, sunday:6)
+	bool weekday_behavior <- true update: (day_of_week>4)?false:true; 
+	
+	bool _I_am_working_today <-false;
+	bool _leisure_status <- false;
+	bool _work_in_municipality <-true;
+	float _distance_to_work_today;
+	
 	
 	//aidwork1
 	
@@ -162,7 +192,9 @@ species driving_people skills:[moving]{
 			albatross_Dpop<-world.classify_dpop(myPC.dpop);
 			//save [albatross_Darb] to:"../R/useTrees/1.csv" type:csv header:true;
 			
-			write build_d1_parameters(self);
+			//write build_d1_parameters(self);
+			
+			//_distance_to_work_today <-world.work_distance(true);
 			
 					
 	}
@@ -229,8 +261,42 @@ species driving_people skills:[moving]{
 	///    END - ACTION LIST TO GET KEY VALUES TO MATCH THE DECISION TREE AS RECOMMENED BY AUKE             ///
     ///																					     ///
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	
+	reflex daily_routine when: cycle mod 96 = 0
+	{
+		_I_am_working_today <- i_go_work_today();
+		_leisure_status <- i_go_out_leisure(_I_am_working_today);
+		
+		if _I_am_working_today
+		{
+			_work_in_municipality <- world.work_in_municipality();
+			_distance_to_work_today <- world.work_distance(_work_in_municipality);
+		}
+
+	}
 	
 	
+	
+	bool i_go_out_leisure (bool _work){
+		
+		return _I_am_working_today? flip(0.2):flip(0.8);
+	}
+	
+	bool i_go_work_today{
+		
+		return day_of_week > 4? flip(0.05):flip(0.95);
+	}
+	
+	
+	action get_distance_to_home{
+		using topology(the_graph){
+			
+		write "distanceToHome" + self distance_to driving_people[0].location  ;
+		}
+		
+		write "distance Euclidian ToHome" + self distance_to driving_people[0].location  ;
+	}
 	
 	
 	
@@ -241,7 +307,7 @@ species driving_people skills:[moving]{
 	}
 }
 
-experiment ABCDdriving type: gui {
+experiment ABCDdriving type: gui{
 	/** Insert here the definition of the input and output of the model */
 	output {
 		display first type:java2D  focus:is_number(put_in_postcode) and (put_in_postcode)!=0?(first(driving_pc_polygons where (each.pc=put_in_postcode))):world.shape{

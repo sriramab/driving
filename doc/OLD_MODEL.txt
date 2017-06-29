@@ -1,0 +1,64 @@
+reflex fix_daily_routine when: cycle mod 96 = 0 and cycle >1
+	{
+		_I_am_working_today <- flip(0.90)? self._I_am_working_today:do_i_go_work_today();
+		_I_have_a_nonWork_trip <- do_i_go_out_for_leisure(_I_am_working_today);
+		if _I_am_working_today
+		{
+			_Is_it_full_time <- do_i_work_full_time();
+			_do_I_work_within_my_municipality <- world.work_in_municipality();
+
+			//FIX THE DISTANCE TO WORK SO THAT AGENT IS NOT CHANGING OFFICE EVERYDAY, ONLY 5% CHANCE FOR AGENT TO CHANGE WORK PLACE
+			//BUT RETURNS TO SAME PREVIOUS WORK PLACE EVERYDAY
+			if cycle > 1
+			{
+				_my_distance_to_work_today <- flip(0.95) ? self._my_distance_to_work_today : world.work_distance(_do_I_work_within_my_municipality);
+			}
+
+			_leave_home_for_office <- world.startTime_in_cycles();
+			if _Is_it_full_time
+			{
+				
+				my_link <- link((self), geometry(_my_workplace));
+				_leave_work_at_cycle <- _leave_home_for_office + world.leave_office((_Is_it_full_time));
+				time_left_afterWork_incycles <- 96 - _leave_work_at_cycle;
+				if _I_have_a_nonWork_trip
+				{
+					if _time_to_home_from_work_in_cycles * risk_factor < time_left_afterWork_incycles - 6 //6 is 90 minutes of non-work activity
+
+					{
+						_leisure_distance <- world.leisure_distance(); // from albatross patterns
+						_leisure_location <- one_of(first(5, driving_pc_polygons sort_by (each.horeca) at_distance _leisure_distance)); //select one of the top five recreational areas
+						if _leisure_location = nil
+						{
+							do go_home;
+						}
+
+					} else
+					{
+						do go_home;
+					}
+
+				} else if (cycle mod 90 > _leave_work_at_cycle)
+				{
+					do go_home;
+				}
+
+			} else
+			{
+				_leave_work_at_cycle <- _leave_home_for_office + world.leave_office(_Is_it_full_time);
+				my_link <- link((self), geometry(_my_workplace));
+				time_left_afterWork_incycles <- 96 - _leave_work_at_cycle;
+			}
+
+		} else if not (_I_am_working_today)
+		{
+			_leisure_distance <- world.leisure_distance(); // from albatross patterns
+			_leisure_location <- one_of(first(5, driving_pc_polygons sort_by (each.horeca) at_distance _leisure_distance)); //select one of the top five recreational areas
+			if _leisure_location = nil
+			{
+				do go_home;
+			}
+
+		}
+
+	}
