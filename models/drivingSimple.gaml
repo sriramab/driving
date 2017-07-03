@@ -407,8 +407,8 @@ species driving_people skills: [moving] control: fsm
 				
 				if _I_have_a_nonWork_trip
 				{
-					if _time_taken_to_home_from_work_in_cycles * risk_factor < time_left_afterWork_incycles -6 //6 is 90 minutes of non-work activity
-					{
+//					if _time_taken_to_home_from_work_in_cycles * risk_factor < time_left_afterWork_incycles -6 //6 is 90 minutes of non-work activity
+//					{
 						
 						_leisure_distance <- world.leisure_distance(); // from albatross patterns
 						_leisure_location <- one_of(first(5,driving_pc_polygons sort_by (each.horeca) at_distance _leisure_distance)); //select one of the top five recreational areas
@@ -426,17 +426,18 @@ species driving_people skills: [moving] control: fsm
 						}
 						
 						
-					} else
-					{
-						add my_home_location to:_consequent_next_activity_location;
-					}
+//					}
+//					 else
+//					{
+//						add my_home_location to:_consequent_next_activity_location;
+//					}
 
-				} else if (cycle mod 90 > _leave_work_at_cycle)
+				} else //if (cycle mod 90 > _leave_work_at_cycle)
 				{
 					add my_home_location to:_consequent_next_activity_location;
 				}
 				
-			} else if not(_Is_it_full_time)
+			} else //if not(_Is_it_full_time)
 			{
 				_leave_work_at_cycle <- _leave_home_for_office_in_cycle + world.leave_office(_Is_it_full_time);
 				add _leave_work_at_cycle to:_current_activity_endtime;
@@ -471,7 +472,7 @@ species driving_people skills: [moving] control: fsm
 						add my_home_location to:_consequent_next_activity_location;
 					}
 
-				} else if (cycle mod 90 > _leave_work_at_cycle)
+				} else //if (cycle mod 90 > _leave_work_at_cycle)
 				{
 					add my_home_location to:_consequent_next_activity_location;
 				}
@@ -481,7 +482,7 @@ species driving_people skills: [moving] control: fsm
 				
 			}
 
-		} else if not (_I_am_working_today)
+		} else //if not (_I_am_working_today)
 		{
 			_leave_home_for_office_in_cycle <- world.startTime_in_cycles(); //office is here leisure activity
 			
