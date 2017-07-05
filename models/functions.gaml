@@ -453,6 +453,30 @@ global
 		return float(first(sample([rnd(0.5), rnd(0.5, 2.5), rnd(2.5, 3.5), rnd(3.5, 5.5), rnd(5.5, 9.5), rnd(9.5, 17.5), rnd(17.5, 100)], 1, false, probabilities_List)));
 	}
 	
+	//------------------------------
+	
+	list<int> estimate_my_travel(int days<-30, int battery_range<-220){
+		
+		list<float> distances;
+		int how_many_times <- days;
+		int defined_range<-battery_range;
+		
+		loop  times:how_many_times{
+		add ovin_work_distance() to:distances;
+		}
+		
+		float total_distance<-0.0;
+		
+		loop i over:distances{
+			total_distance <- total_distance + i;
+			
+		}
+		
+		
+		
+		return [int(total_distance),distances count (each>defined_range) ];
+	}
+
 	
 	//------------------------------
 	
@@ -481,7 +505,7 @@ global
 			rnd(300,309.9),rnd(310,319.9),
 			rnd(320,329.9),rnd(330,389.9),
 			rnd(390,399.9),rnd(400,509.9),
-			rnd(510,599.9)])));
+			rnd(510,599.9)], 1, false, probabilities_List)));
 		
 		
 	}
@@ -638,6 +662,9 @@ global
 		//write kk;
 		float distance_work <- get_distance(avg: 20, purpose: "weekend");
 		//write "aukes distance to work  " + distance_work;
+		//write estimate_my_travel(days:3,battery_range:220);
+		
+		
 	}
 
 }
