@@ -213,7 +213,7 @@ species driving_people skills: [moving] control: fsm
 		
 		
 		////// INITIALIZE AND FIX A WHOLE DAY ACTIVITY
-		
+		float abcd <- world.ovin_work_distance();
 		_I_am_working_today <- do_i_go_work_today();
 		_I_have_a_nonWork_trip <- do_i_go_out_for_leisure(_I_am_working_today);
 		if _I_am_working_today
