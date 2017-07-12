@@ -515,7 +515,7 @@ global
 					total_distance <- total_distance + i;
 				}
 
-				return [int(total_distance), distances count (each > defined_range)];
+				return [int(total_distance), distances count (each > defined_range),sum(distances where (each > defined_range))];
 			}
 
 			match "ovin"
@@ -532,7 +532,7 @@ global
 					total_distance <- total_distance + i;
 				}
 
-				return [int(total_distance), distances count (each > defined_range)];
+				return [int(total_distance), distances count (each > defined_range),sum(distances where (each > defined_range))];
 			}
 
 			match "albatross_work"
@@ -550,7 +550,7 @@ global
 					total_distance <- total_distance + i;
 				}
 
-				return [int(total_distance), distances count (each > defined_range)];
+				return [int(total_distance), distances count (each > defined_range),sum(distances where (each > defined_range))];
 			}
 
 			match "albatross_leisure"
@@ -566,8 +566,10 @@ global
 				{
 					total_distance <- total_distance + i;
 				}
+				
+				
 
-				return [int(total_distance), distances count (each > defined_range)];
+				return [int(total_distance), distances count (each > defined_range),sum(distances where (each > defined_range))];
 			}
 
 		}

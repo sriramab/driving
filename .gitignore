@@ -1,4 +1,6 @@
 .metadata
 /.metadata
 .metadata/
+/doc/md/.Rhistory
+doc/md/.Rhistory
 
