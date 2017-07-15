@@ -1,10 +1,10 @@
 /**
-* Name: classify
+* Name: Functions
 * Author: skbhamidipati
 * Description: 
 * Tags: Tag1, Tag2, TagN
 */
-model classify
+model functions
 
 /* Insert your model definition here */
 global
@@ -493,7 +493,7 @@ global
 	}
 
 	//------------------------------
-	list<int> estimate_my_travel (int days <- 30, int battery_range <- 220, string family <- "mixed")
+	list estimate_my_travel (int days <- 30, int battery_range <- 220, string family <- "mixed")
 	{
 		list<float> distances;
 		int how_many_times <- days; //min:1 max:10;
@@ -515,7 +515,7 @@ global
 					total_distance <- total_distance + i;
 				}
 
-				return [int(total_distance), distances count (each > defined_range),sum(distances where (each > defined_range))];
+				return [int(total_distance), distances count (each > defined_range), sum(distances where (each > defined_range)), distances];
 			}
 
 			match "ovin"
@@ -532,7 +532,7 @@ global
 					total_distance <- total_distance + i;
 				}
 
-				return [int(total_distance), distances count (each > defined_range),sum(distances where (each > defined_range))];
+				return [int(total_distance), distances count (each > defined_range), sum(distances where (each > defined_range)), distances];
 			}
 
 			match "albatross_work"
@@ -550,7 +550,7 @@ global
 					total_distance <- total_distance + i;
 				}
 
-				return [int(total_distance), distances count (each > defined_range),sum(distances where (each > defined_range))];
+				return [int(total_distance), distances count (each > defined_range), sum(distances where (each > defined_range)), distances];
 			}
 
 			match "albatross_leisure"
@@ -566,10 +566,8 @@ global
 				{
 					total_distance <- total_distance + i;
 				}
-				
-				
 
-				return [int(total_distance), distances count (each > defined_range),sum(distances where (each > defined_range))];
+				return [int(total_distance), distances count (each > defined_range), sum(distances where (each > defined_range)), distances];
 			}
 
 		}
@@ -714,7 +712,7 @@ global
 
 }
 
-experiment name type: gui
+experiment function_calls type: gui
 {
 
 // Define parameters here if necessary
