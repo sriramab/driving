@@ -433,6 +433,29 @@ global
 		return d;
 	}
 
+	//------- matrix elementwise multiplication
+	matrix matrix_o2m (matrix aa, matrix bb)
+	{
+		list<int> c;
+		loop j from: 0 to: aa.rows - 1
+		{
+			loop i from: 0 to: aa.rows - 1
+			{
+				int s <- 0;
+				loop while: s < aa.rows
+				{
+					add int(aa[i, j]) * int(bb[s, j]) to: c;
+					s <- s + 1;
+				}
+
+			}
+
+		}
+
+		matrix cc <- c as_matrix ({ 9, 3 });
+		return cc;
+	}
+
 	//-----------------------------
 	float leisure_distance
 	{
