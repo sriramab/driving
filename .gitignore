@@ -3,4 +3,8 @@
 .metadata/
 /doc/md/.Rhistory
 doc/md/.Rhistory
+.DS_Store
+models/.DS_Store
+R/.DS_Store
+
 
