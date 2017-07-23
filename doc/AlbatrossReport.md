@@ -1,7 +1,7 @@
 Albatross Travel Patterns
 ================
 Srirama Bhamidipati
-22 July 2017
+20 July 2017
 
 Summary
 -------
@@ -28,3 +28,15 @@ Summary
 #### 3. Which modes are used for travel to work?
 
 ![](AlbatrossReport_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-4-1.png)
+
+#### 3. How far do people travel to work?
+
+![](AlbatrossReport_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-6-1.png)
+
+#### 4. How does the travel pattern look on weekends?
+
+![](AlbatrossReport_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-7-1.png)
+
+#### 5. How does travel pattern differ by gender?
+
+![](AlbatrossReport_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-8-1.png)
