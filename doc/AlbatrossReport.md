@@ -37,6 +37,10 @@ Summary
 
 ![](AlbatrossReport_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-7-1.png)
 
-#### 5. How does travel pattern differ by gender?
+#### 5. How does the travel pattern look on weekdays?
 
 ![](AlbatrossReport_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-8-1.png)
+
+#### 6. How does travel pattern differ by gender?
+
+![](AlbatrossReport_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-9-1.png)
