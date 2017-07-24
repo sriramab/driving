@@ -153,3 +153,24 @@ For control over what distance ranges are extracted from the MON data, we define
 |       180|        190|  0.0037297|  0.0032343|
 |       190|        200|  0.0025230|  0.0021023|
 |       200|        500|  0.0139315|  0.0147162|
+
+Cleaning Data
+-------------
+
+It was found that the data has some problems interms of Travel Distance not matching with Travel Time. For example, some people could reach 500km in 5 minutes. This does not make sense. After careful deliberation, it was decided to discard all households where the Travel Distance atrribute is 500.
+
+#### Cleaned : Travel Distance vs Travel Time - All modes - All purposes - Weekdays
+
+![](AlbatrossReport_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-14-1.png)
+
+#### Cleaned : Travel Distance vs Travel Time - car - All purposes
+
+<img src="AlbatrossReport_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-15-1.png" width="100%" />
+
+#### Cleaned : Travel Distance vs Travel Time - car - work
+
+<img src="AlbatrossReport_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-16-1.png" style="display: block; margin: auto;" />
+
+#### Cleaned : Travel Distance vs Travel Time - car - work
+
+<img src="AlbatrossReport_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-17-1.png" style="display: block; margin: auto;" />
