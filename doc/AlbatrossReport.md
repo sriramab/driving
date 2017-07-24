@@ -11,6 +11,12 @@ Summary
 1.  How many modes of travel are reported in Albatross?
 2.  How many activities are registered in Albatross?
 3.  Which modes are used for travel to work?
+4.  How far do people travel to work?
+5.  How does travel pattern look on weekends?
+6.  How does the (work) travel pattern look on weekdays?
+7.  Extracting work pattern on weekdays.
+8.  Extracting (car) work pattern on weekdays.
+9.  Extracting travel pattern on weekends. 10.Extracting (car) travel pattern on weekends.
 
 #### 1. How many and which modes?
 
@@ -100,13 +106,13 @@ For control over what distance ranges are extracted from the MON data, we define
 |       190|        200|  0.0011879|  0.0010232|
 |       200|        500|  0.0118793|  0.0096812|
 
-#### 9. Extracting work pattern on weekends
+#### 9. Extracting travel pattern on weekends
 
 For control over what distance ranges are extracted from the MON data, we define our own distance bins.
 
 ![](AlbatrossReport_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-11-1.png)
 
-#### 10. Extracting (car) work pattern on weekends
+#### 10. Extracting (car) travel pattern on weekends
 
 For control over what distance ranges are extracted from the MON data, we define our own distance bins.
 
