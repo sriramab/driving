@@ -16,7 +16,8 @@ Summary
 6.  How does the (work) travel pattern look on weekdays?
 7.  Extracting work pattern on weekdays.
 8.  Extracting (car) work pattern on weekdays.
-9.  Extracting travel pattern on weekends. 10.Extracting (car) travel pattern on weekends.
+9.  Extracting travel pattern on weekends.
+10. Extracting (car) travel pattern on weekends.
 
 #### 1. How many and which modes?
 
