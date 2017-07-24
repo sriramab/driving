@@ -29,33 +29,41 @@ Summary
 
 ![](AlbatrossReport_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-4-1.png)
 
-#### 3. How far do people travel to work?
+#### 4. How far do people travel to work?
 
 ![](AlbatrossReport_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-6-1.png)
 
-#### 4. How does the travel pattern look on weekends?
+#### 5. How does the travel pattern look on weekends?
 
 ![](AlbatrossReport_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-7-1.png)
 
-#### 5. How does the ((work)) travel pattern look on weekdays ?
+#### 6. How does the ((work)) travel pattern look on weekdays ?
 
 ![](AlbatrossReport_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-8-1.png)
 
-#### 6. How does travel pattern differ by gender?
-
-![](AlbatrossReport_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-9-1.png)
-
+<!-- #### 6. How does travel pattern differ by gender? -->
+<!-- ```{r} -->
+<!-- ggplot(data=monCleaned_Distance[monCleaned_Distance$Atype=="Work" & monCleaned_Distance$Day <=5,], aes(x=TravDist, fill=factor(Gend), colour=factor(Gend))) +  -->
+<!--   geom_line(stat = "density")+ -->
+<!--   #geom_histogram()+ -->
+<!--  # geom_freqpoly(data=monCleaned_Distance[monCleaned_Distance$Atype=="Work" & monCleaned_Distance$Day <=5 & monCleaned_Distance$Gend==0,], binwidth = 5) + -->
+<!--   #geom_line(data=monCleaned_Distance[monCleaned_Distance$Atype=="Work" & monCleaned_Distance$Day <=5 & monCleaned_Distance$Gend==0,],stat = "density", colour="blue", alpha=0.2) + -->
+<!--  # geom_line(data=monCleaned_Distance[monCleaned_Distance$Atype=="Work" & monCleaned_Distance$Day <=5 & monCleaned_Distance$Gend==1,],stat = "density", colour="red", alpha=0.2) + -->
+<!--   #geom_density(colour=NA, fill="blue", alpha=0.2)+  -->
+<!--   facet_wrap(~Mode, ncol = 2, scales = "free_y") +  -->
+<!--   xlab("Distance in km") +  xlim(0,200)  -->
+<!-- ``` -->
 #### 7. Extracting work pattern on weekdays
 
 For control over what distance ranges are extracted from the MON data, we define our own distance bins.
 
-![](AlbatrossReport_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-10-1.png)
+![](AlbatrossReport_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-9-1.png)
 
-#### 7. Extracting (car) work pattern on weekdays
+#### 8. Extracting (car) work pattern on weekdays
 
 For control over what distance ranges are extracted from the MON data, we define our own distance bins.
 
-![](AlbatrossReport_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-11-1.png)
+![](AlbatrossReport_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-10-1.png)
 
 |  bin\_low|  bin\_high|   carsOnly|   allModes|
 |---------:|----------:|----------:|----------:|
@@ -91,3 +99,50 @@ For control over what distance ranges are extracted from the MON data, we define
 |       180|        190|  0.0011879|  0.0011806|
 |       190|        200|  0.0011879|  0.0010232|
 |       200|        500|  0.0118793|  0.0096812|
+
+#### 9. Extracting work pattern on weekends
+
+For control over what distance ranges are extracted from the MON data, we define our own distance bins.
+
+![](AlbatrossReport_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-11-1.png)
+
+#### 10. Extracting (car) work pattern on weekends
+
+For control over what distance ranges are extracted from the MON data, we define our own distance bins.
+
+![](AlbatrossReport_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-12-1.png)
+
+|  bin\_low|  bin\_high|   carsOnly|   allModes|
+|---------:|----------:|----------:|----------:|
+|         0|          1|  0.0129443|  0.0225864|
+|         1|          2|  0.0782141|  0.1224732|
+|         2|          3|  0.0870996|  0.1074875|
+|         3|          4|  0.0772269|  0.0794566|
+|         4|          5|  0.0627468|  0.0635006|
+|         5|          6|  0.0529838|  0.0513719|
+|         6|          7|  0.0567135|  0.0470056|
+|         7|          8|  0.0473892|  0.0391893|
+|         8|          9|  0.0346643|  0.0308339|
+|         9|         10|  0.0344449|  0.0290550|
+|        10|         15|  0.1173760|  0.1032828|
+|        15|         20|  0.0692190|  0.0539054|
+|        20|         25|  0.0425625|  0.0384346|
+|        25|         30|  0.0353225|  0.0295402|
+|        30|         40|  0.0372971|  0.0330440|
+|        40|         50|  0.0262176|  0.0239879|
+|        50|         60|  0.0210619|  0.0190286|
+|        60|         70|  0.0200746|  0.0176271|
+|        70|         80|  0.0127249|  0.0136920|
+|        80|         90|  0.0133831|  0.0114819|
+|        90|        100|  0.0084467|  0.0090022|
+|       100|        110|  0.0063624|  0.0070077|
+|       110|        120|  0.0062527|  0.0070616|
+|       120|        130|  0.0049364|  0.0043663|
+|       130|        140|  0.0048267|  0.0051749|
+|       140|        150|  0.0030715|  0.0026953|
+|       150|        160|  0.0036200|  0.0038273|
+|       160|        170|  0.0014261|  0.0025336|
+|       170|        180|  0.0012067|  0.0012937|
+|       180|        190|  0.0037297|  0.0032343|
+|       190|        200|  0.0025230|  0.0021023|
+|       200|        500|  0.0139315|  0.0147162|
